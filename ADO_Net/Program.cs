@@ -18,11 +18,9 @@ namespace ADO_Net
                 Console.WriteLine("Connection is open");
                 var command = new SqlCommand(sqlExpression, connection);
 
-                var result1 = command.ExecuteNonQuery();
-
                 var result = command.ExecuteReader();
                 var i = 1;
-                Console.WriteLine("Request: select ContactName, Country from dbo.Customers where Country in ('USA', 'Canada') order by ContactName\n");
+                Console.WriteLine($"Request: {sqlExpression}\n");
                 Console.WriteLine($"\tContactName \tCountry\n");
                 
                 while (result.Read())
@@ -30,8 +28,13 @@ namespace ADO_Net
                     Console.WriteLine(string.Format("{0,-3} {1,-20} {2}", i, result[0], result[1]));
                     i++;
                 }
+                result.Close();
                 Console.WriteLine();
-            }
+                var sqlExpression1 = "INSERT INTO dbo.Region (RegionID, RegionDescription) VALUES (7, 'newRegion')";
+                var command1 = new SqlCommand(sqlExpression1, connection);
+                Console.WriteLine($"Request: {sqlExpression1}\n");
+                Console.WriteLine($"Number of rows changed: {command1.ExecuteNonQuery()}");
+            }           
             Console.WriteLine("Connection is close");
             Console.Read();
         }
