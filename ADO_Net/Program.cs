@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Net.Cache;
 
@@ -12,7 +13,9 @@ namespace ADO_Net
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             //SelectFromDB(connectionString);
             //InsertToDb(connectionString);
-            ExeStorageProc(connectionString);           
+            //ExeStorageProc(connectionString);
+            //ProcWithOutputParameter(connectionString, 3);
+            Transaction(connectionString);
             Console.Read();
         }
         private static void SelectFromDB(string connectionString)
@@ -43,7 +46,7 @@ namespace ADO_Net
             {
                 connection.Open();
                 var sqlExpression = "INSERT INTO dbo.Region (RegionID, RegionDescription) VALUES (11, 'newRegion11')";
-                var command = new SqlCommand(sqlExpression,connection);
+                var command = new SqlCommand(sqlExpression, connection);
                 Console.WriteLine($"Request: {command.CommandText}\n");
                 var result1 = command.ExecuteReader();
                 Console.WriteLine($"Number of rows changed: {result1}");
@@ -66,13 +69,60 @@ namespace ADO_Net
                 command.Parameters.Add(countParam);
                 var result2 = command.ExecuteReader();
                 var i = 1;
-                Console.WriteLine(string.Format("{0,12} {1,12} {2,12} {3,-10} {4}\n",result2.GetName(0), result2.GetName(1), result2.GetName(2),result2.GetName(3),result2.GetName(4)));
+                Console.WriteLine(string.Format("{0,12} {1,12} {2,12} {3,-10} {4}\n", result2.GetName(0), result2.GetName(1), result2.GetName(2), result2.GetName(3), result2.GetName(4)));
                 while (result2.HasRows && result2.Read())
                 {
                     Console.WriteLine(string.Format("{0,-2} {1,4} {2,-10} {3,-10} {4,-7} {5}", i, result2[0], result2[1], result2[2], result2[3], result2[4]));
                     i++;
                 }
                 result2.Close();
+            }
+            Console.WriteLine();
+        }
+
+        private static void ProcWithOutputParameter(string connectionString, int id)
+        {
+            using (var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var sqlExpression = "MaxOrerDate";
+                var command = new SqlCommand(sqlExpression, connection);
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+                var idEmployeeParam = new SqlParameter { ParameterName = "@employeeID", Value = id };
+                command.Parameters.Add(idEmployeeParam);
+                var maxOrderDateParam = new SqlParameter { ParameterName = "@maxOrderDate", SqlDbType=SqlDbType.DateTime };
+                maxOrderDateParam.Direction = ParameterDirection.Output;
+                command.Parameters.Add(maxOrderDateParam);
+                command.ExecuteNonQuery();
+                Console.WriteLine($"Max order date for employeeID{id}: {command.Parameters["@maxOrderDate"].Value}");
+            }
+        }
+        private static void Transaction(string connectionString)
+        {
+            using(var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var transaction = connection.BeginTransaction();
+                var command = connection.CreateCommand();
+                command.Transaction = transaction;
+                try
+                {
+                    //выполняем отдельные команды
+                    command.CommandText= "INSERT INTO Users (ID, Name, Age) VALUES(1,'Tim', 34)";
+                    //command.CommandText = "DELETE FROM Users WHERE Name='Tim'";
+                    //command.CommandText = "DELETE FROM Users WHERE Name='Kat'";
+                    command.ExecuteNonQuery();
+                    command.CommandText = "INSERT INTO Users (ID, Name, Age) VALUES(2, 'Kat', 31)";
+                    command.ExecuteNonQuery();
+                    //подтверждение транзакции
+                    transaction.Commit();
+                    Console.WriteLine("Data were insert to DB");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    transaction.Rollback();
+                }
             }
         }
     }
