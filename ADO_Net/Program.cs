@@ -2,7 +2,7 @@
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Net.Cache;
+using System.Resources;
 
 namespace ADO_Net
 {
@@ -15,7 +15,8 @@ namespace ADO_Net
             //InsertToDb(connectionString);
             //ExeStorageProc(connectionString);
             //ProcWithOutputParameter(connectionString, 3);
-            Transaction(connectionString);
+            //Transaction(connectionString);
+            UseSqlCommandBuilder(connectionString);
             Console.Read();
         }
         private static void SelectFromDB(string connectionString)
@@ -123,6 +124,42 @@ namespace ADO_Net
                     Console.WriteLine(ex.Message);
                     transaction.Rollback();
                 }
+            }
+        }
+
+        private static void UseSqlCommandBuilder(string connectionString)
+        {
+            string request = "SELECT * FROM Users";
+            using(var connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                var adapter = new SqlDataAdapter(request, connection);
+                var ds = new DataSet();//создаём хранилище для данных  из бд
+                adapter.Fill(ds);//заполняем хранилище данными из бд
+                var dt = ds.Tables[0];
+
+                var newRow = dt.NewRow();
+                newRow["ID"] = 3;
+                newRow["Name"] = "Alice";
+                newRow["Age"] = 24;
+                dt.Rows.Add(newRow);
+
+                var commandBuilder = new SqlCommandBuilder(adapter);//автоматическое определение необходимой команды на основе изменений dt
+                adapter.Update(ds);
+                ds.Clear();
+                adapter.Fill(ds);
+
+                foreach (DataColumn column in dt.Columns)
+                    Console.Write("\t{0}", column.ColumnName);
+                Console.WriteLine();
+                foreach(DataRow row in dt.Rows)
+                {
+                    var cells = row.ItemArray;
+                    foreach (var cell in cells)
+                        Console.Write("\t{0}", cell);
+                    Console.WriteLine();
+                }
+
             }
         }
     }

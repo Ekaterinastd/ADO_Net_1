@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADO_Net", "ADO_Net\ADO_Net.csproj", "{205682F5-FC40-4885-A7CB-F448D5CA629F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdoNetWinForms", "WindowsFormsApp1\AdoNetWinForms.csproj", "{C9C2A2CB-0BA8-4515-92B8-747B55BCF026}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{205682F5-FC40-4885-A7CB-F448D5CA629F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{205682F5-FC40-4885-A7CB-F448D5CA629F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{205682F5-FC40-4885-A7CB-F448D5CA629F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9C2A2CB-0BA8-4515-92B8-747B55BCF026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9C2A2CB-0BA8-4515-92B8-747B55BCF026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9C2A2CB-0BA8-4515-92B8-747B55BCF026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9C2A2CB-0BA8-4515-92B8-747B55BCF026}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
