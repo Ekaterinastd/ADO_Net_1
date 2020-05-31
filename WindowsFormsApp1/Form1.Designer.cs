@@ -41,13 +41,13 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(776, 436);
+            this.dataGridView1.Size = new System.Drawing.Size(1520, 436);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // NextButton
             // 
-            this.NextButton.Location = new System.Drawing.Point(663, 457);
+            this.NextButton.Location = new System.Drawing.Point(1401, 462);
             this.NextButton.Name = "NextButton";
             this.NextButton.Size = new System.Drawing.Size(115, 33);
             this.NextButton.TabIndex = 1;
@@ -57,7 +57,7 @@
             // 
             // backButton
             // 
-            this.backButton.Location = new System.Drawing.Point(505, 457);
+            this.backButton.Location = new System.Drawing.Point(1243, 462);
             this.backButton.Name = "backButton";
             this.backButton.Size = new System.Drawing.Size(115, 33);
             this.backButton.TabIndex = 2;
@@ -69,7 +69,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 502);
+            this.ClientSize = new System.Drawing.Size(1528, 507);
             this.Controls.Add(this.backButton);
             this.Controls.Add(this.NextButton);
             this.Controls.Add(this.dataGridView1);
